@@ -11,15 +11,14 @@
  */
 public class Solution {
     public boolean hasCycle(ListNode head) {
-        ListNode fast = head;  // Two Pointers
-        ListNode slow = head;
-        while(fast != null && fast.next != null){
-            fast = fast.next.next; 
-            slow = slow.next;
-            if(fast == slow){  // When two pointers point at same index then there is a cycle.
+        HashSet<ListNode> set = new HashSet<>();  // Created a HashSet to store the values.
+        while(head != null){ 
+            if(set.contains(head)){ // If the value is in HashSet.
                 return true;
             }
+            set.add(head); // Add the value in the HashSet.
+            head = head.next; // Move the pointer
         }
-        return false;
+        return false; 
     }
 }

@@ -1,15 +1,18 @@
 class Solution {
-    public int firstUniqChar(String s) {  // Used HashMap instead of queue.
-        HashMap<Character, Integer> chr = new HashMap<>();
-        for(char i : s.toCharArray()){ // Store the frequency of each chracter in string.
-            chr.put(i, chr.getOrDefault(i, 0) + 1);
+    public int firstUniqChar(String s) {
+        int[] freq = new int[26]; // Frequency array for characters
+        Queue<Integer> q = new LinkedList<>(); // Queue to store indices of characters
+
+        for (int i = 0; i < s.length(); i++) {
+            char ch = s.charAt(i);
+            freq[ch - 'a']++; // Increment frequency of the character
+            q.add(i); // Add index of the character to the queue
         }
-        for(int i = 0; i <s.length(); i++){ // Run a for loop to check the iteration of character that equal to 1.
-            if(chr.get(s.charAt(i)) == 1){ // If there is a character withh frequency 1.
-                return i; // Return the index.
-            }
+
+        while (!q.isEmpty() && freq[s.charAt(q.peek()) - 'a'] > 1) {
+            q.poll(); // Remove indices of non-unique characters
         }
-        return -1; // Else return -1.
-        
+
+        return q.isEmpty() ? -1 : q.peek(); // Return index of first unique char or -1
     }
 }

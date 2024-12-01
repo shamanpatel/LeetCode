@@ -1,18 +1,30 @@
 class Solution {
     public int[] topKFrequent(int[] nums, int k) {
-        HashMap<Integer, Integer> map = new HashMap<>(); //Creating a HashMap for storing the values and frequency
+        // Step 1: Count the frequency of each number using a HashMap
+        HashMap<Integer, Integer> frequent = new HashMap<>();
         for (int num : nums) {
-            map.put(num, map.getOrDefault(num, 0) + 1);
+            frequent.put(num, frequent.getOrDefault(num, 0) + 1);
         }
 
-        List<Map.Entry<Integer, Integer>> sortedEntries = new ArrayList<>(map.entrySet()); // Convert the HashMap in List
-        sortedEntries.sort((a, b) -> b.getValue().compareTo(a.getValue())); // Stored the values in descending order
+        // Step 2: Use a Min-Heap (PriorityQueue) to keep track of the top K elements
+        PriorityQueue<Map.Entry<Integer, Integer>> minHeap = new PriorityQueue<>(
+            (a, b) -> a.getValue() - b.getValue() // Compare entries based on their frequency (ascending order)
+        );
 
-        int[] result = new int[k]; // Taking the elemts with frequency of k and more than k.
+        // Step 3: Add entries to the heap
+        for (Map.Entry<Integer, Integer> entry : frequent.entrySet()) {
+            minHeap.add(entry); // Add current entry to the heap
+            if (minHeap.size() > k) {
+                minHeap.poll(); // Remove the entry with the smallest frequency when size exceeds k
+            }
+        }
+
+        // Step 4: Extract the top K elements from the heap
+        int[] result = new int[k];
         for (int i = 0; i < k; i++) {
-            result[i] = sortedEntries.get(i).getKey(); // Add the values to array result.
+            result[i] = minHeap.poll().getKey(); // Extract the key (number) from the heap
         }
 
-        return result;
+        return result; // Return the result array containing the top K frequent elements
     }
 }

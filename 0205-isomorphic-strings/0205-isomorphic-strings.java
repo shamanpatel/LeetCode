@@ -1,20 +1,23 @@
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        if (s.length() != t.length()) return false; // Check for different lengths
+        HashMap<Character, Character> map = new HashMap<>();
+        HashMap<Character, Character> isomorphic = new HashMap<>();
 
-        HashMap<Character, Integer> str = new HashMap<>(); 
-        HashMap<Character, Integer> isomorphic = new HashMap<>();
+        for(int i = 0; i < s.length(); i++){
+            char charS = s.charAt(i); 
+            char charT = t.charAt(i);
 
-       
-        for (int i = 0; i < s.length(); i++) {   // Store the frequency maps for both strings.
-            if(!str.containsKey(s.charAt(i))){
-                str.put(s.charAt(i),i);
+            if(map.containsKey(charS)){
+                if(map.get(charS) != charT){ //If characters does not match return false
+                    return false;
+                }
             }
-            if(!isomorphic.containsKey(t.charAt(i))){
-                isomorphic.put(t.charAt(i),i);
-            }
-            if(!str.get(s.charAt(i)).equals(isomorphic.get(t.charAt(i)))){ // Check if the character equals to charcter map.
-                return false;
+            else{
+                if(isomorphic.containsKey(charT)){ //If characters does not match return false
+                    return false;
+                }
+                map.put(charS, charT); // Add the character of map as key and character of isomorphic as value.
+                isomorphic.put(charT, charS);// Add the character of isomorphic as key and character of map as value.
             }
         }
         return true;

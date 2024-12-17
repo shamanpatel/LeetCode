@@ -1,24 +1,38 @@
 class Solution {
     public boolean wordPattern(String pattern, String s) {
-        String[] word = s.split(" ");  //  Split the string.
-        if(word.length != pattern.length()){ // Now if the length is not matching return false
+        HashMap<Character, String> map = new HashMap<>();
+        HashMap<String, Character> reverseMap = new HashMap<>();
+        String[] words = s.split(" ");
+
+        // Check if the pattern length matches the number of words
+        if (pattern.length() != words.length) {
             return false;
         }
-        HashMap<Character, String> map = new HashMap(); // Created a HashMap that match the character to a String 
-    
-        for(int i=0; i<pattern.length(); i++){ 
-            char c = pattern.charAt(i); // Take a single character from the String
 
-            if(map.containsKey(c)){  // If map contains that character 
-                if(!map.get(c).equals(word[i])){ // Then if it not equals to the word in string s.
-                    return false;
+        for (int i = 0; i < pattern.length(); i++) {
+            char c = pattern.charAt(i);
+            String word = words[i];
+
+            // Check if the character already maps to a word
+            if (map.containsKey(c)) {
+                if (!map.get(c).equals(word)) {
+                    return false; // Mismatch in mapping
                 }
+            } 
+            else 
+            {
+                map.put(c, word);
             }
-            else{
-                if(map.containsValue(word[i])){ 
-                    return false;
+
+            // Check the reverse mapping (word to character)
+            if (reverseMap.containsKey(word)) {
+                if (reverseMap.get(word) != c) {
+                    return false; // Mismatch in reverse mapping
                 }
-                map.put(c, word[i]); // Then add the word to a character map.
+            } 
+            else 
+            {
+                reverseMap.put(word, c);
             }
         }
 

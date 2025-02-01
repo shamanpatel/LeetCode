@@ -1,37 +1,29 @@
 
 class Solution {
     public int calPoints(String[] operations) {
-        List<Integer> list = new ArrayList<>();
-
-        for (int i = 0; i < operations.length; i++) {
-            String op = operations[i];
-
-            if (op.matches("-?\\d+")) { // Check if it's a number (positive or negative)
-                list.add(Integer.parseInt(op));
-            } 
-            else if (op.equals("C")) { // Remove the last valid score
-                if (!list.isEmpty()) {
-                    list.remove(list.size() - 1);
-                }
-            } 
-            else if (op.equals("D")) { // Double the last valid score
-                if (!list.isEmpty()) {
-                    list.add(2 * list.get(list.size() - 1));
-                }
-            } 
-            else if (op.equals("+")) { // Sum the last two valid scores
-                if (list.size() >= 2) {
-                    list.add(list.get(list.size() - 1) + list.get(list.size() - 2));
-                }
+        Stack<Integer> st = new Stack<>();
+        for(int i = 0; i < operations.length; i++){
+            if(operations[i].equals("+")){
+                int a = st.pop();
+                int b = st.peek();
+                st.push(a);
+                st.push(a + b);
+            }
+            else if(operations[i].equals("C")){
+                st.pop();
+            }
+            else if(operations[i].equals("D")){
+                st.push(2 * st.peek());
+            }
+            else{
+                int a = Integer.parseInt(operations[i]);
+                st.push(a);
             }
         }
-
-        // Calculate the total sum of scores
-        int sum = 0;
-        for (int num : list) {
-            sum += num;
+        int result = 0;
+        for(int i : st){
+            result += i;
         }
-
-        return sum;
+        return result;
     }
 }
